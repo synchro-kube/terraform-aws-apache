@@ -37,9 +37,9 @@ resource "aws_security_group" "sg_my_server" {
     protocol    = "tcp"
     cidr_blocks = [var.my_public_ip]
     ipv6_cidr_blocks = ["::/0"]
-	prefix_list_ids  = []
-	security_groups = []
-	self = false
+	  prefix_list_ids  = []
+	  security_groups = []
+	  self = false
   }]
 
   egress {
@@ -49,9 +49,9 @@ resource "aws_security_group" "sg_my_server" {
     cidr_blocks = ["0.0.0.0/0"]
     description = "Allow all outgoing traffic"
     ipv6_cidr_blocks = ["::/0"]
-	prefix_list_ids  = []
-	security_groups = []
-	self = false
+	  prefix_list_ids  = []
+	  security_groups = []
+	  self = false
   }
 }
 
@@ -69,14 +69,17 @@ data "aws_ami" "amazon-linux-2" {
   owners           = ["amazon"]
 
   filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+/*
+  filter {
     name   = "owner-alias"
     values = ["amazon"]
   }
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
- 
+
+ */
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
