@@ -26,9 +26,9 @@ resource "aws_security_group" "sg_my_server" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
-	prefix_list_ids  = []
-	security_groups = []
-	self = false
+	  prefix_list_ids  = []
+	  security_groups = []
+	  self = false
   },
   {
     description = "SSH"
