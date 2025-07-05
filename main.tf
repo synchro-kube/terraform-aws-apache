@@ -13,6 +13,15 @@ data "aws_vpc" "main" {
   id = var.vpc_id
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets
+
+data "aws_subnets" "subnet_ids" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.main.id]
+  }
+}
+
 # https://registry.terraform.io/providers/hashicorp/aws/2.54.0/docs/resources/security_group
 
 resource "aws_security_group" "sg_my_server" {
@@ -91,11 +100,12 @@ data "aws_ami" "amazon-linux-2" {
 resource "aws_instance" "my_server" {
   ami                         = "${data.aws_ami.amazon-linux-2.id}"
   instance_type               = var.instance_type
- # subnet_id                   = aws_subnet.subnet_public.id
+  subnet_id                   = data.aws_subnets.subnet_ids.ids[0]
   vpc_security_group_ids      = [aws_security_group.sg_my_server.id]
   # user_data                   = file("./user_data.yaml")
   user_data = file("${path.module}/user_data.yaml")  # https://developer.hashicorp.com/terraform/language/functions/file
   key_name = aws_key_pair.key.key_name
+  associate_public_ip_address = true
 
   tags = {
     Name = "Build Module"
